@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}schedule{% endblock %}
+
+
+{% block content %}
+    <h1>Book your appointment on {{ date }} at {{ time }}</h1>
+    <form action="success/" method='POST'>
+        {% csrf_token %}
+        <input type="hidden" name='date' value={{ date }}>
+        <input type="hidden" name="time" value={{ time }}>
+        <input type="hidden" name="date_and_time" value={{ date_and_time }}>
+        <input type="hidden" name="index" value={{ index }}>
+        <input type="hidden" name="time_period" value={{ time_period }}>
+        {{ form.as_p }}
+        <input type="submit">
+    </form>
+{% endblock %}
