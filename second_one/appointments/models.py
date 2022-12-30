@@ -2,46 +2,28 @@ from django.db import models
 import datetime
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
+from authenticate.models import NewUser
 
-class User(models.Model):
-    name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50, blank=True, null=True)
-    email = models.EmailField(max_length=50, blank=True, null=True)
-    date_of_birth = models.DateField(blank=True, null=True)
-    phone_number = models.IntegerField(unique=True)
-    password = models.CharField(max_length=40)
+class Appointment(models.Model):
+    user = models.ForeignKey(NewUser, on_delete=models.CASCADE)
     
     def __str__(self):
-        return str(self.phone_number)
-    
-# class CustomUser(AbstractUser):
-#     phone_number = models.IntegerField(unique=True, null=True, blank=True)  # uncoment the AUTH element in the settings file
-
+        return str(self.pk)
+  
 class Gap(models.Model):
     date_and_time = models.DateTimeField(unique=True)
     time_period = models.DurationField()
-    index = models.CharField(max_length=10, default='')
+    appointment = models.ForeignKey(Appointment, on_delete=models.SET_DEFAULT, default=None, null=True)
+    is_limit = models.BooleanField(default=False)
+    
     
     def __str__(self):
-        return str(self.date_and_time.time())
+        return str(self.date_and_time.time().strftime('%I:%M %p'))
     
-class Appointment(models.Model):
-    gap = models.OneToOneField(Gap, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    
-    def __str__(self):
-        return self.gap
-
-# class Appointment(models.Model):
-#     gap = models.OneToOneField(Gap, on_delete=models.CASCADE)
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    
-#     def __str__(self):
-#         return self.gap
 
 class Week(models.Model):
     minutes_per_appointment = models.IntegerField(default=30)
-    start_date = models.DateField(default=timezone.now)
+    start_date = models.DateField()
     monday_start = models.TimeField(default=datetime.time(7), blank=True, null=True)
     monday_end = models.TimeField(default=datetime.time(22), blank=True, null=True)
     tuesday_start = models.TimeField(default=datetime.time(7), blank=True, null=True)

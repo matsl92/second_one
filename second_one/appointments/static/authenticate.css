@@ -1,7 +1,7 @@
 body {
     margin: 0;
     padding: 0;
-    background: url(https://i.ibb.co/VQmtgjh/6845078.png) no-repeat;
+    background: url(./media/main_background.jpg), no-repeat;
     height: 100vh;
     font-family: sans-serif;
     background-size: cover;
@@ -28,7 +28,7 @@ body {
         transform: translate(-50%,-50%);
         width: 350px;
         min-height: 200px;
-        background: #000000;
+        background-color: rgba(243, 243, 243, .5);
         border-radius: 10px;
         padding: 40px;
         box-sizing: border-box
@@ -43,7 +43,7 @@ body {
     h3 {
         margin: 0;
         padding: 0 0 20px;
-        color: #59238F;
+        color: rgb(30, 82, 82);
         text-align: center
     }
 
@@ -64,15 +64,6 @@ body {
         box-sizing: border-box
     }
 
-    .loginBox input[type="text"]:hover, .loginBox input[type="password"]:hover {
-        color: #42F3FA;
-        border: 1px solid #42F3FA;
-        box-shadow: 0 0 5px rgba(0,255,0,.3), 0 0 10px rgba(0,255,0,.2), 0 0 15px rgba(0,255,0,.1), 0 2px 0 black
-    }
-
-    .loginBox input[type="text"]:focus, .loginBox input[type="password"]:focus {
-        border-bottom: 2px solid #42F3FA
-    }
 
     .inputBox {
         position: relative
@@ -89,14 +80,14 @@ body {
         outline: none;
         height: 40px;
         font-size: 16px;
-        background: #59238F;
+        background-color: rgba(33, 37, 41, 1);
         color: #fff;
         border-radius: 20px;
         cursor: pointer
     }
 
     .loginBox a {
-        color: #424242; 
+        color: rgb(30, 82, 82);
         font-size: 14px;
         font-weight: bold;
         text-decoration: none;
@@ -105,5 +96,17 @@ body {
     }
 
     a:hover {
-        color: #00ffff
-    }
+        color: rgba(33, 37, 41, 1);
+    } 
+
+.user-icon {
+    margin: auto;
+    margin-bottom: 15px;
+    display: block;
+    height: 100px;
+    width: 100px;
+    background-image: url(./media/user-icon.png);
+    background-size: cover;
+}
+
+

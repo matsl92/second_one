@@ -3,15 +3,29 @@
 
 
 {% block content %}
-    <h1>Book your appointment on {{ date }} at {{ time }}</h1>
-    <form action="success/" method='POST'>
-        {% csrf_token %}
-        <input type="hidden" name='date' value={{ date }}>
-        <input type="hidden" name="time" value={{ time }}>
-        <input type="hidden" name="date_and_time" value={{ date_and_time }}>
-        <input type="hidden" name="index" value={{ index }}>
-        <input type="hidden" name="time_period" value={{ time_period }}>
-        {{ form.as_p }}
-        <input type="submit">
-    </form>
+    <div class='container'>
+        <h1>Book your appointment on {{ gap.date_and_time.date }} at {{ gap.date_and_time.time }}</h1>
+        <br>
+        {% if gap.is_limit == False %}
+            <p>Select a specific service</p>
+        {% else %}
+            <p>For another service select a different gap </p>
+        {% endif %}
+        <form action="success/" method='POST'>
+            {% csrf_token %}
+            <input type="hidden" name="pk" value={{ gap.pk }}>
+            <div class="form-row inner-container">
+                <div class="form-group col-md-4">
+                    <select class='form-control form-select' name="duration" id="duration">
+                        <option value="30">haircut</option>
+                        {% if gap.is_limit == False %}
+                            <option value="40">haircut and beard</option>
+                        {% endif %}       
+                    </select>
+                </div>   
+            </div>       
+            <br>
+            <input type="submit" class="btn btn-primary" value="Submit">
+        </form>
+    </div>
 {% endblock %}

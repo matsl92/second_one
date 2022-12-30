@@ -1,33 +1,20 @@
 {% extends 'base.html' %}
-{% block title %}Create gaps{% endblock %}
-
+{% block title %}Select overwrite{% endblock %}
 
 {% block content %}
-
-
-<h1>Select the gaps you don't want to include</h1>
-    <div class="main-container">
-        <form action="" method='POST' id='gap_index' class='form'>
-            {% csrf_token %}
-            {% for day in semigap_pack %}
-                <div class="column">
-                    {% for semigap in day %}
-                        <div class="row">
-                            {% if forloop.counter0 == 0 %}
-                                <div class='date-label'>
-                                    <p>{{ semigap.day }}</p>
-                                    <p>{{ semigap.date }}</p>
-                                </div>
-                            {% else %}
-                                <input type="checkbox" name='indexes' id="{{ semigap.index }}" value="{{ semigap.index }}">
-                                <label for={{ semigap.index }}>{{ semigap }}</label>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-            <br>
-            <br>
+<h1>There are some gaps already created for {{ start_date_name }}</h1>
+<div class='container'>
+    <form action="/create_gaps/" method='GET'>
+        {% csrf_token %}
+        <div class="form-row inner-container">
+            <div class="form-group col-md-4">
+                <label for="option">Select an action</label>
+                <select class='form-control form-select' name="option" id="option" placeholder='Days to be desplayed'>
+                    <option value="0">Select a different start day</option>    
+                    <option value="2">Edit available gaps and keep the scheduled ones</option>
+                    <option value="3">Overwrite and cancel gaps for selected days</option>
+                </select>
+            </div>
             <div>
                 <input type="hidden" name='minutes_per_appointment' value={{ minutes_per_appointment }}>
                 <input type="hidden" name='n_days' value={{ n_days }}>
@@ -46,11 +33,14 @@
                 <input type="hidden" name='saturday_end' value={{ saturday_end }}>
                 <input type="hidden" name='sunday_start' value={{ sunday_start }}>
                 <input type="hidden" name='sunday_end' value={{ sunday_end }}>
-                <input type="hidden" name='option' value={{ option }}>
             </div>
-            <input type="submit" class="btn btn-primary" value="Create gaps">
-        </form>
-        
-    </div>
+            <br>
+        </div>
+        <br>
+        <input type="submit" class="btn btn-primary" value="Submit">
+    </form>
+    
+</div>
+
 
 {% endblock %}
