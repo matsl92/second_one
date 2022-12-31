@@ -598,10 +598,16 @@ def success(request):
 
 @login_required()
 def appointments(request):
-    user_appoints = Appointment.objects.filter(user=request.user)
+    appoints = list(Appointment.objects.filter(user=request.user))
+    for appoint in appoints:
+        try:
+            if appoint.gap_set.last().date_and_time + appoint.gap_set.last().time_period < make_aware(datetime.today()):
+                appoints.remove(appoint)
+        except:
+            appoints.remove(appoint)
     try:
-        appoint_beginnings = [appoint.gap_set.all()[0] for appoint in user_appoints]
-        appoint_beginnings.sort(key=lambda x: x.pk)
+        appoint_beginnings = [appoint.gap_set.first() for appoint in appoints]
+        appoint_beginnings.sort(key=lambda gap: gap.date_and_time)
     except:
         appoint_beginnings = []
     context = {'list': appoint_beginnings, 'title': 'Your appointments'}
@@ -611,7 +617,10 @@ def appointments(request):
 def outlook(request):
     appoints = list(Appointment.objects.all())
     for appoint in appoints:
-        if appoint.gap_set.last().date_and_time + appoint.gap_set.last().time_period < make_aware(datetime.today()):
+        try:
+            if appoint.gap_set.last().date_and_time + appoint.gap_set.last().time_period < make_aware(datetime.today()):
+                appoints.remove(appoint)
+        except:
             appoints.remove(appoint)
     try:
         appoint_beginnings = [appoint.gap_set.first() for appoint in appoints]
@@ -620,3 +629,17 @@ def outlook(request):
         appoint_beginnings = []
     context = {'list': appoint_beginnings, 'title': 'Upcoming appointments'}
     return render(request, 'appointments/appointments.html', context)
+
+@login_required()
+def create_week(request):
+    if request.method == 'GET':
+        form = WeekForm
+        context = {'form': form}
+        return render(request, 'appointments/create_week.html', context)
+    if request.method == 'POST':
+        form = WeekForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return(redirect('appointments:home'))
+        else:
+            return redirect('appointments:create_week')
